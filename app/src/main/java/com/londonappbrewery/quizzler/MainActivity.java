@@ -52,12 +52,22 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        trueButton = (Button) findViewById(R.id.true_button);
-        falseButton = (Button) findViewById(R.id.false_button);
-        questionTextView = (TextView) findViewById(R.id.question_text_view);
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        scoreTextView = (TextView) findViewById(R.id.score);
+        if (savedInstanceState != null) {
+            score = savedInstanceState.getInt("ScoreKey");
+            index = savedInstanceState.getInt("ScoreKey");
+        } else {
+            score = 0;
+            index = 0;
+        }
+        trueButton = findViewById(R.id.true_button);
+        falseButton = findViewById(R.id.false_button);
+        questionTextView = findViewById(R.id.question_text_view);
+        progressBar = findViewById(R.id.progress_bar);
+        scoreTextView = findViewById(R.id.score);
 
+        // update the text in case the screen rotated.
+        scoreTextView.setText(String.format(getString(R.string.score),
+                score, mQuestionBank.length));
 
         trueButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,5 +120,15 @@ public class MainActivity extends Activity {
                 finish();
             }
         }).show();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt("ScoreKey", score);
+        outState.putInt("IndexKey", index);
+
+
     }
 }
